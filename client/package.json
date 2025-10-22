@@ -1,7 +1,8 @@
 {
-  "name": "client",
+  "name": "sales-enquiry-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Frontend client for Sales Enquiry Management System",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,8 +11,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.20.1",
+    "@mui/material": "^5.15.0",
+    "@mui/icons-material": "^5.15.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "axios": "^1.6.2",
+    "chart.js": "^4.4.1",
+    "react-chartjs-2": "^5.2.0",
+    "date-fns": "^3.0.6",
+    "formik": "^2.4.5",
+    "yup": "^1.3.3",
+    "react-toastify": "^9.1.3",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
