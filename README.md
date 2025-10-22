@@ -5,7 +5,7 @@
  ## Project structure (top-level)
  - `client/` — React + Vite frontend
  - `server/` — Node/Express backend (minimal at present)
- - `Readmi/readmi.md` — this quick setup file
+ - `Readmi/Sales-Enquiry-Project-Plan.md` — this is the project plan
 
  ## Prerequisites
  - Node.js (LTS recommended v18 or v20). Verify: `node -v` and `npm -v`
