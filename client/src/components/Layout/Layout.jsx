@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import {
   Menu as MenuIcon,
+  Close as CloseIcon,
   Dashboard as DashboardIcon,
   Assignment as AssignmentIcon,
   People as PeopleIcon,
@@ -44,10 +45,15 @@ const Layout = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleDesktopDrawerToggle = () => {
+    setDesktopOpen(!desktopOpen);
   };
 
   const handleMenuClick = (event) => {
@@ -71,7 +77,7 @@ const Layout = () => {
 
   const drawer = (
     <Box sx={{ height: '100%', background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)' }}>
-      <Toolbar sx={{ py: 2, background: 'rgba(0, 0, 0, 0.1)' }}>
+      <Toolbar sx={{ py: 2, background: 'rgba(0, 0, 0, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <AssignmentIcon sx={{ color: 'white', fontSize: 32 }} />
           <Box>
@@ -83,6 +89,19 @@ const Layout = () => {
             </Typography>
           </Box>
         </Box>
+        {/* Close button for desktop */}
+        <IconButton
+          onClick={handleDesktopDrawerToggle}
+          sx={{ 
+            color: 'white',
+            display: { xs: 'none', sm: 'block' },
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            }
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Toolbar>
       <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
       <List sx={{ px: 2, pt: 2 }}>
@@ -144,13 +163,33 @@ const Layout = () => {
         position="fixed"
         elevation={0}
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { sm: desktopOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
+          ml: { sm: desktopOpen ? `${drawerWidth}px` : 0 },
           backgroundColor: 'white',
           borderBottom: '1px solid #e2e8f0',
+          transition: 'width 0.3s ease, margin 0.3s ease',
         }}
       >
         <Toolbar sx={{ py: 1 }}>
+          {/* Desktop Menu Toggle - Only show when sidebar is closed */}
+          {!desktopOpen && (
+            <IconButton
+              color="primary"
+              aria-label="toggle drawer"
+              edge="start"
+              onClick={handleDesktopDrawerToggle}
+              sx={{ 
+                mr: 2, 
+                display: { xs: 'none', sm: 'block' },
+                '&:hover': {
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          {/* Mobile Menu Toggle */}
           <IconButton
             color="primary"
             aria-label="open drawer"
@@ -216,7 +255,11 @@ const Layout = () => {
       </AppBar>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ 
+          width: { sm: desktopOpen ? drawerWidth : 0 }, 
+          flexShrink: { sm: 0 },
+          transition: 'width 0.3s ease',
+        }}
       >
         <Drawer
           variant="temporary"
@@ -231,12 +274,16 @@ const Layout = () => {
           {drawer}
         </Drawer>
         <Drawer
-          variant="permanent"
+          variant="persistent"
+          open={desktopOpen}
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth,
+              transition: 'transform 0.3s ease',
+            },
           }}
-          open
         >
           {drawer}
         </Drawer>
@@ -246,9 +293,10 @@ const Layout = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: desktopOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
           backgroundColor: '#f8fafc',
           minHeight: '100vh',
+          transition: 'width 0.3s ease',
         }}
       >
         <Toolbar />
