@@ -9,6 +9,7 @@ import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Pages
+import Landing from './pages/Landing/Landing';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -159,6 +160,9 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
+          {/* Landing Page */}
+          <Route path="/" element={<Landing />} />
+
           {/* Public Routes */}
           <Route 
             path="/login" 
@@ -181,9 +185,8 @@ function App() {
             <Route path="/reports" element={<Reports />} />
           </Route>
 
-          {/* Redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          {/* Redirect unknown routes to landing */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
       <ToastContainer position="top-right" autoClose={3000} />
