@@ -70,30 +70,71 @@ const Layout = () => {
   };
 
   const drawer = (
-    <div>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          Sales Enquiry
-        </Typography>
+    <Box sx={{ height: '100%', background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)' }}>
+      <Toolbar sx={{ py: 2, background: 'rgba(0, 0, 0, 0.1)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <AssignmentIcon sx={{ color: 'white', fontSize: 32 }} />
+          <Box>
+            <Typography variant="h6" noWrap sx={{ color: 'white', fontWeight: 700, lineHeight: 1 }}>
+              Sales Hub
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
+              Enquiry System
+            </Typography>
+          </Box>
+        </Box>
       </Toolbar>
-      <Divider />
-      <List>
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+      <List sx={{ px: 2, pt: 2 }}>
         {menuItems.map((item) => {
           // Check if user has permission to view this menu item
           if (item.roles && !item.roles.includes(user?.role)) {
             return null;
           }
           return (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton onClick={() => navigate(item.path)}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+            <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton 
+                onClick={() => navigate(item.path)}
+                sx={{
+                  borderRadius: 2,
+                  color: 'rgba(255,255,255,0.9)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  }
+                }}
+              >
+                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontWeight: 600,
+                    fontSize: '0.95rem'
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           );
         })}
       </List>
-    </div>
+      <Box sx={{ 
+        position: 'absolute', 
+        bottom: 20, 
+        left: 0, 
+        right: 0, 
+        px: 3,
+        color: 'rgba(255,255,255,0.6)',
+        textAlign: 'center'
+      }}>
+        <Typography variant="caption">
+          FCL © 2025
+        </Typography>
+      </Box>
+    </Box>
   );
 
   return (
@@ -101,14 +142,17 @@ const Layout = () => {
       <CssBaseline />
       <AppBar
         position="fixed"
+        elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          backgroundColor: 'white',
+          borderBottom: '1px solid #e2e8f0',
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ py: 1 }}>
           <IconButton
-            color="inherit"
+            color="primary"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
@@ -116,13 +160,27 @@ const Layout = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Sales Enquiry Management System
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: 'text.primary', fontWeight: 600 }}>
+            Sales Enquiry Management
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="body2">{user?.name}</Typography>
-            <IconButton onClick={handleMenuClick} color="inherit">
-              <Avatar sx={{ width: 32, height: 32 }}>
+            <Box sx={{ textAlign: 'right', display: { xs: 'none', sm: 'block' } }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                {user?.name}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {user?.role}
+              </Typography>
+            </Box>
+            <IconButton onClick={handleMenuClick}>
+              <Avatar 
+                sx={{ 
+                  width: 40, 
+                  height: 40,
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  fontWeight: 600
+                }}
+              >
                 {user?.name?.charAt(0).toUpperCase()}
               </Avatar>
             </IconButton>
@@ -131,16 +189,25 @@ const Layout = () => {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
+            PaperProps={{
+              elevation: 3,
+              sx: {
+                mt: 1.5,
+                minWidth: 200,
+                borderRadius: 2,
+              }
+            }}
           >
-            <MenuItem onClick={() => { navigate('/profile'); handleMenuClose(); }}>
+            <MenuItem onClick={() => { navigate('/profile'); handleMenuClose(); }} sx={{ py: 1.5 }}>
               <ListItemIcon>
                 <AccountCircle fontSize="small" />
               </ListItemIcon>
               Profile
             </MenuItem>
-            <MenuItem onClick={handleLogout}>
+            <Divider />
+            <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: 'error.main' }}>
               <ListItemIcon>
-                <Logout fontSize="small" />
+                <Logout fontSize="small" color="error" />
               </ListItemIcon>
               Logout
             </MenuItem>
@@ -180,10 +247,14 @@ const Layout = () => {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          backgroundColor: '#f8fafc',
+          minHeight: '100vh',
         }}
       >
         <Toolbar />
-        <Outlet />
+        <Box sx={{ mt: 2 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

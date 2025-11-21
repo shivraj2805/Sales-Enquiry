@@ -137,6 +137,25 @@ export const deleteEnquiry = async (req, res, next) => {
   }
 };
 
+// @desc    Delete all enquiries (Admin only)
+// @route   DELETE /api/enquiries/all
+// @access  Private (Admin only)
+export const deleteAllEnquiries = async (req, res, next) => {
+  try {
+    const result = await Enquiry.deleteMany({});
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully deleted ${result.deletedCount} enquiries`,
+      data: {
+        deletedCount: result.deletedCount,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Upload attachment to enquiry
 // @route   POST /api/enquiries/:id/attachments
 // @access  Private

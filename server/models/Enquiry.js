@@ -4,18 +4,29 @@ const enquirySchema = new mongoose.Schema(
   {
     enquiryNumber: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true, // Allow null/undefined before auto-generation
+    },
+    poNumber: {
+      type: String,
+      trim: true,
     },
     customerName: {
       type: String,
-      required: [true, 'Please provide customer name'],
+      required: false, // Made optional since Excel data may not have this
       trim: true,
+      default: 'N/A',
     },
     enquiryDate: {
       type: Date,
-      required: [true, 'Please provide enquiry date'],
+      required: false, // Made optional, will use default if not provided
       default: Date.now,
+    },
+    dateReceived: {
+      type: Date,
+    },
+    dateSubmitted: {
+      type: Date,
     },
     marketType: {
       type: String,
@@ -36,6 +47,32 @@ const enquirySchema = new mongoose.Schema(
     },
     estimatedValue: {
       type: Number,
+    },
+    // Department status fields
+    drawingStatus: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed', 'Not Required'],
+      default: 'Pending',
+    },
+    costingStatus: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed', 'Not Required'],
+      default: 'Pending',
+    },
+    rndStatus: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed', 'Not Required'],
+      default: 'Pending',
+    },
+    salesStatus: {
+      type: String,
+      enum: ['Pending', 'In Progress', 'Completed', 'Not Required'],
+      default: 'Pending',
+    },
+    // Manufacturing type
+    manufacturingType: {
+      type: String,
+      enum: ['Inhouse', 'Broughtout', 'Both'],
     },
     salesRepresentative: {
       type: mongoose.Schema.Types.ObjectId,
@@ -68,6 +105,9 @@ const enquirySchema = new mongoose.Schema(
     },
     fulfillmentTime: {
       type: Number, // in days
+    },
+    daysRequiredForFulfillment: {
+      type: Number, // Expected days for fulfillment
     },
     closureDate: {
       type: Date,
@@ -104,7 +144,8 @@ const enquirySchema = new mongoose.Schema(
 
 // Auto-generate enquiry number before saving
 enquirySchema.pre('save', async function (next) {
-  if (this.isNew) {
+  // Only auto-generate if this is a new document AND enquiryNumber is not already set
+  if (this.isNew && !this.enquiryNumber) {
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');

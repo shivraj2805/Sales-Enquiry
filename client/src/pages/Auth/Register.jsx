@@ -63,14 +63,48 @@ const Register = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box sx={{ marginTop: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Create Account
-          </Typography>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        py: 4,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,255,255,.1) 0%, transparent 50%)',
+        }
+      }}
+    >
+      <Container component="main" maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
+        <Paper 
+          elevation={10} 
+          sx={{ 
+            p: 5, 
+            borderRadius: 4,
+            background: 'rgba(255,255,255,0.95)',
+            backdropFilter: 'blur(10px)',
+            my: 4,
+          }}
+        >
+          <Box sx={{ textAlign: 'center', mb: 3 }}>
+            <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
+              Create Account
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Join Sales Enquiry Management System
+            </Typography>
+          </Box>
 
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+          {error && (
+            <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+              {error}
+            </Alert>
+          )}
 
           <Box component="form" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -163,22 +197,39 @@ const Register = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              size="large"
+              sx={{ 
+                mt: 3, 
+                mb: 2,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 600,
+                boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)',
+              }}
               disabled={loading}
             >
               {loading ? 'Creating Account...' : 'Sign Up'}
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
               <Link to="/login" style={{ textDecoration: 'none' }}>
-                <Typography variant="body2" color="primary">
+                <Typography 
+                  variant="body2"
+                  sx={{ 
+                    color: 'primary.main',
+                    fontWeight: 600,
+                    '&:hover': {
+                      textDecoration: 'underline'
+                    }
+                  }}
+                >
                   Already have an account? Sign In
                 </Typography>
               </Link>
             </Box>
           </Box>
         </Paper>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
