@@ -143,6 +143,8 @@ export const bulkImportEnquiries = async (req, res, next) => {
     const results = {
       total: data.length,
       successful: 0,
+      created: 0,
+      updated: 0,
       failed: 0,
       errors: [],
       columnNames: Object.keys(data[0] || {}), // For debugging
@@ -293,8 +295,10 @@ export const bulkImportEnquiries = async (req, res, next) => {
         if (existingEnquiry) {
           await Enquiry.findByIdAndUpdate(existingEnquiry._id, enquiryData);
           console.log(`Updated existing enquiry: ${enquiryNumber}`);
+          results.updated++;
         } else {
           await Enquiry.create(enquiryData);
+          results.created++;
         }
         results.successful++;
         

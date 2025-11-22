@@ -172,10 +172,11 @@ const EnquiryList = () => {
       setImportResult(response.data.data);
       setSuccess(`Import completed! ${response.data.data.successful} enquiries imported successfully.`);
       
-      // Refresh the list
+      // Refresh the list and close dialog after showing results
       setTimeout(() => {
         fetchEnquiries();
-      }, 1000);
+        handleCloseImportDialog();
+      }, 5000);
       
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to import enquiries');
@@ -681,7 +682,10 @@ const EnquiryList = () => {
                     • Total rows: {importResult.total}
                   </Typography>
                   <Typography variant="body2">
-                    • Successfully imported: {importResult.successful}
+                    • Created: {importResult.created || 0}
+                  </Typography>
+                  <Typography variant="body2">
+                    • Updated: {importResult.updated || 0}
                   </Typography>
                   <Typography variant="body2">
                     • Failed: {importResult.failed}
