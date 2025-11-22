@@ -24,4 +24,22 @@ export const dashboardService = {
     const response = await api.get('/dashboard/trend-analysis');
     return response.data.data; // Return just the data
   },
+
+  // Get activity distribution
+  getActivityDistribution: async () => {
+    const response = await api.get('/dashboard/activity-distribution');
+    return response.data.data;
+  },
+
+  // Get product distribution
+  getProductDistribution: async () => {
+    const response = await api.get('/dashboard/product-distribution');
+    return response.data.data;
+  },
+
+  // Get fulfillment analysis
+  getFulfillmentAnalysis: async () => {
+    const response = await api.get('/dashboard/fulfillment-analysis');
+    return response.data.data;
+  },
 };

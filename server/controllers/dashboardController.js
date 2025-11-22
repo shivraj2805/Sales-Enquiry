@@ -121,12 +121,103 @@ export const getMarketAnalysis = async (req, res, next) => {
       },
     ]);
 
+    // Top products analysis
+    const topProducts = await Enquiry.aggregate([
+      {
+        $group: {
+          _id: '$productType',
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
     res.status(200).json({
       success: true,
       data: {
         marketAnalysis,
         activityByMarket,
+        topProducts,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get activity distribution
+// @route   GET /api/dashboard/activity-distribution
+// @access  Private
+export const getActivityDistribution = async (req, res, next) => {
+  try {
+    const activityDistribution = await Enquiry.aggregate([
+      {
+        $group: {
+          _id: '$activity',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: activityDistribution,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get product type distribution
+// @route   GET /api/dashboard/product-distribution
+// @access  Private
+export const getProductDistribution = async (req, res, next) => {
+  try {
+    const productDistribution = await Enquiry.aggregate([
+      {
+        $group: {
+          _id: '$productType',
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: productDistribution,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get fulfillment time analysis
+// @route   GET /api/dashboard/fulfillment-analysis
+// @access  Private
+export const getFulfillmentAnalysis = async (req, res, next) => {
+  try {
+    const fulfillmentData = await Enquiry.aggregate([
+      {
+        $match: {
+          fulfillmentTime: { $exists: true, $ne: null, $gte: 0 },
+        },
+      },
+      {
+        $bucket: {
+          groupBy: '$fulfillmentTime',
+          boundaries: [0, 1, 3, 5, 10, 1000],
+          default: '10+',
+          output: {
+            count: { $sum: 1 },
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: fulfillmentData,
     });
   } catch (error) {
     next(error);
